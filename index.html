@@ -44,6 +44,10 @@
   google.setOnLoadCallback(initCharts);
   
   
+  setInterval('chartReload()', 10 * 60 * 1000);
+  //setInterval('chartReload()',  3000);
+  
+  
 
   // initialize the chart
   function initCharts() {
@@ -251,6 +255,11 @@ function drawChart() {
       google.charts.setOnLoadCallback(drawChart);
 */
 	
+	function chartReload(){
+		document.getElementById('iframe1').src = document.getElementById('iframe1').src;
+		document.getElementById('iframe2').src = document.getElementById('iframe2').src;
+		document.getElementById('iframe3').src = document.getElementById('iframe3').src;
+	}
   </script>
  
  
@@ -265,15 +274,15 @@ function drawChart() {
 	</div>
 		<div id="inner1" style="height:250px; width:1500px; margin:auto;">
 			<div id="gauge_div_temp"></div>
-			<iframe width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&width=1200&type=spline"></iframe>
+			<iframe id="iframe1" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&width=1200&type=spline"></iframe>
 		</div>
 		<div id="inner1" style="height:250px; width:1500px; margin:auto; padding-top:20px;">
 			<div id="gauge_div_humi"></div>
-			<iframe width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline"></iframe>
+			<iframe id="iframe2" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline"></iframe>
 		</div>
 		<div id="inner1" style="height:250px; width:1500px; margin:auto; padding-top:20px;">
 			<div id="gauge_div_heat"></div>
-			<iframe width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline"></iframe>
+			<iframe id="iframe3" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline"></iframe>
 		</div>
       
 	  <div id="curve_chart" style="width: 800px; height:0px"></div>
