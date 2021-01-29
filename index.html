@@ -10,15 +10,12 @@
   -->  
   <style type="text/css">
   body { background-color: #ddd; }
-  #gauge_div_temp { float: left;}
-  #gauge_div_humi { float: left;}
-  #gauge_div_heat { float: left;}
   
-  /*
-  #container { height: 100%; width: 100%; display: table; }
-  #inner { vertical-align: left; display: table-cell; }
-  #gauge_div { width: 120px; margin: 0 auto; }
-  */
+  .gauge { float: left; width: 250px; height: 250px;}
+  
+  .chartIframe {float: left;}
+  
+  
 </style>
 
 
@@ -191,69 +188,7 @@
    chart3.draw(data, options3);
   }
 
-/*
-function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['2021-01-25 13:00:00.000', 'Temp'],
-          ['2021-01-26 13:00:00.000',  20],
-          ['2021-01-27 13:00:00.000',  21],
-          ['2021-01-28 13:00:00.000',  23],
-          ['2021-01-29 13:00:00.000',  25]
-        ]);
-		
-		 var data = new google.visualization.DataTable();
-		data.addColumn('date', 'Date');
-		data.addColumn('number', 'Temp');
-		
-		data.addRows([
-		 [Date.parse('2021-01-25'), 'Temp'],
-          ['2021-01-26 13:00:00',  20],
-          ['2021-01-27 13:00:00',  21],
-          ['2021-01-28 13:00:00',  23],
-          ['2021-01-29 13:00:00',  25]
-		  ]);
-		
-        var options = {
-          title: 'Temperature',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-         
-        chart.draw(data, options);
-      }
-  
-	  google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-	*/  
- 
-/*
-  function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
-
-        var options = {
-          title: 'Company Performance',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-         
-        chart.draw(data, options);
-      }
-  
-	  google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-*/
 	
 	function chartReload(){
 		document.getElementById('iframe1').src = document.getElementById('iframe1').src;
@@ -273,19 +208,32 @@ function drawChart() {
 		<h1 style="font-family: 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Arial, Helvetica, Verdana, sans-serif;"> Temperature & Humidity Monitoring </h1>
 	</div>
 		<div id="inner1" style="height:250px; width:1500px; margin:auto;">
-			<div id="gauge_div_temp"></div>
-			<iframe id="iframe1" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&width=1200&type=spline"></iframe>
+			<div class="gauge"> 
+				<div id="gauge_div_temp"></div>
+			</div>
+			<div class="chartIframe">
+				<iframe id="iframe1" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&width=1200&type=spline"></iframe>
+			</div>
 		</div>
 		<div id="inner1" style="height:250px; width:1500px; margin:auto; padding-top:20px;">
-			<div id="gauge_div_humi"></div>
-			<iframe id="iframe2" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline"></iframe>
+			<div class="gauge"> 
+				<div id="gauge_div_humi"></div>
+				</div>
+			<div class="chartIframe">
+				<iframe id="iframe2" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline"></iframe>
+			</div>
 		</div>
 		<div id="inner1" style="height:250px; width:1500px; margin:auto; padding-top:20px;">
-			<div id="gauge_div_heat"></div>
-			<iframe id="iframe3" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline"></iframe>
+			<div class="gauge"> 
+				<div id="gauge_div_heat" class="gauge"></div>
+			</div>
+			<div class="chartIframe">
+				<iframe id="iframe3" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline"></iframe>
+			</div>
 		</div>
+		
       
-	  <div id="curve_chart" style="width: 800px; height:0px"></div>
+	  
 	 </div>
   </body>
 </html>
