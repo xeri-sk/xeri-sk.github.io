@@ -10,10 +10,40 @@
   -->  
   <style type="text/css">
   body { background-color: #ddd; }
+  .header{
+	text-align:center;
+	width: 1452px;
+	margin: auto;
+  }
+  
+  .headerText {
+		font-family: 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Arial, Helvetica, Verdana, sans-serif; 
+		display: block;
+		font-size: 2em;
+		font-weight: bold;
+		/*
+		margin-block-start: 0.67em;
+		margin-block-end: 0.67em;
+		margin-inline-start: 0px;
+		margin-inline-end: 0px;
+		*/
+	
+	}
+	
+	.time{
+		display: block;
+		text-align: right;
+		padding: 5px;
+		font-family: 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Arial, Helvetica, Verdana, sans-serif; 
+	}
   
   .gauge { float: left; width: 250px; height: 250px;}
   
   .chartIframe {float: left;}
+  
+  .inner1 {height:250px; width:1452px; margin:auto;  }
+  .inner2 {height:250px; width:1452px; margin:auto; padding-top: 20px; }
+  .inner3 {height:250px; width:1452px; margin:auto; padding-top: 20px; }
   
   
 </style>
@@ -35,14 +65,45 @@
 
   // global variables
   var chart1, chart2, chart3, options1, options2, options3, charts, data;
+  
+  var lastUpdate = Date.now();
 
   // load the google gauge visualization
   google.load('visualization', '1', {packages:['gauge']});
   google.setOnLoadCallback(initCharts);
   
   
-  setInterval('chartReload()', 10 * 60 * 1000);
-  //setInterval('chartReload()',  3000);
+  setInterval('chartReload()', 1000);
+  
+  function chartReload(){
+		var d = new Date();
+		var n = d.getMinutes();
+		
+		var sec = parseInt((d - lastUpdate) / 1000);
+		
+		if((n == 1 || n == 16 || n == 31 || n == 46) & sec > 60){
+			document.getElementById('iframe1').src = document.getElementById('iframe1').src;
+			document.getElementById('iframe2').src = document.getElementById('iframe2').src;
+			document.getElementById('iframe3').src = document.getElementById('iframe3').src;
+			
+			lastUpdate = Date.now();
+		}
+	}
+  
+  setInterval('timeRefres()', 1000);
+  
+  function timeRefres(){
+	var nowTime = Date.now();
+	var sec = parseInt((nowTime - lastUpdate) / 1000);
+	var timeStr = 'Last update: ';
+	
+	if(sec < 60)
+		timeStr += sec + 'sec';
+	else
+		timeStr += parseInt(sec/60) + 'min';
+		
+	document.getElementById('time').innerHTML = timeStr;
+  }
   
   
 
@@ -190,11 +251,7 @@
 
 
 	
-	function chartReload(){
-		document.getElementById('iframe1').src = document.getElementById('iframe1').src;
-		document.getElementById('iframe2').src = document.getElementById('iframe2').src;
-		document.getElementById('iframe3').src = document.getElementById('iframe3').src;
-	}
+	
   </script>
  
  
@@ -204,10 +261,11 @@
 
   <body>
     <div id="container" >
-	<div style="text-align:center; ">
-		<h1 style="font-family: 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Arial, Helvetica, Verdana, sans-serif;"> Temperature & Humidity Monitoring </h1>
+	<div class="header">
+		<span class="headerText"> Temperature & Humidity Monitoring </span>
+		<span id="time" class="time">Last update: 0sec</span>
 	</div>
-		<div id="inner1" style="height:250px; width:1500px; margin:auto;">
+		<div id="inner1" class="inner1">
 			<div class="gauge"> 
 				<div id="gauge_div_temp"></div>
 			</div>
@@ -215,7 +273,7 @@
 				<iframe id="iframe1" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&width=1200&type=spline"></iframe>
 			</div>
 		</div>
-		<div id="inner1" style="height:250px; width:1500px; margin:auto; padding-top:20px;">
+		<div id="inner1" class="inner2">
 			<div class="gauge"> 
 				<div id="gauge_div_humi"></div>
 				</div>
@@ -223,7 +281,7 @@
 				<iframe id="iframe2" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline"></iframe>
 			</div>
 		</div>
-		<div id="inner1" style="height:250px; width:1500px; margin:auto; padding-top:20px;">
+		<div id="inner1" class="inner3">
 			<div class="gauge"> 
 				<div id="gauge_div_heat" class="gauge"></div>
 			</div>
