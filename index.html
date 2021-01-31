@@ -117,9 +117,9 @@
     
     chart1 = new google.visualization.Gauge(document.getElementById('gauge_div_temp'));
     options1 = {width: 250, height: 250, 
-               min: 20, max: 36,
+               min: 18, max: 34,
                // RED
-               greenFrom: 20, greenTo: 36, greenColor: '#DC3912',
+               greenFrom: 18, greenTo: 34, greenColor: '#DC3912',
                // GREEN
                redFrom: 26, redTo: 28, redColor: '#109618',
                // YELLOW
@@ -129,7 +129,7 @@
                 easing: 'inAndOut',
                 },
                majorTicks: [
-                '20', '22',  '24', '26',  '28', '30', '32', '34', '36' ]
+                '18', '20', '22',  '24', '26',  '28', '30', '32', '34']
               };
 			  
 	chart2 = new google.visualization.Gauge(document.getElementById('gauge_div_humi'));
