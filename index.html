@@ -79,21 +79,21 @@
   google.setOnLoadCallback(initCharts);
   
   
-  setInterval('chartReload()', 1000);
+  //setInterval('chartReload()', 1000);
   
   function chartReload(){
-		var d = new Date();
-		var n = d.getMinutes();
+		//var d = new Date();
+		//var n = d.getMinutes();
 		
-		var sec = parseInt((d - lastUpdateChart) / 1000);
+		//var sec = parseInt((d - lastUpdateChart) / 1000);
 		
-		if((n == 1 || n == 16 || n == 31 || n == 46) & sec > 60){
+		//if((n == 1 || n == 16 || n == 31 || n == 46) & sec > 60){
 			document.getElementById('iframe1').src = document.getElementById('iframe1').src;
 			document.getElementById('iframe2').src = document.getElementById('iframe2').src;
 			document.getElementById('iframe3').src = document.getElementById('iframe3').src;
 			
 			lastUpdateChart = Date.now();
-		}
+		//}
 	}
   
   setInterval('timeRefres()', 1000);
@@ -117,10 +117,16 @@
 		
 	document.getElementById('timeRight').innerHTML = timeStr;
 	
+	//console.log('D1:' +lastUpdateGaugeRounded.toLocaleString());
+	//console.log('D2:' + (new Date(lastUpdateChart)).toLocaleString());
+	
+	if(lastUpdateGaugeRounded > lastUpdateChart)
+		chartReload();
+	
 	//document.getElementById('timeRight').innerHTML = myDate.toLocaleString() + '***' + rounded.toLocaleString();
 	
 	// gauge
-	console.log(lastUpdateGauge);
+	//console.log(lastUpdateGauge);
 	var sec = parseInt((nowTime - Date.parse(lastUpdateGauge)) / 1000);
 	var timeStr = 'Last update: ';
 	
