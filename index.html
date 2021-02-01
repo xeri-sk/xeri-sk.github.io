@@ -30,9 +30,14 @@
 	
 	}
 	
-	.time{
-		display: block;
+	.timeRight{
 		text-align: right;
+		padding: 5px;
+		font-family: 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Arial, Helvetica, Verdana, sans-serif; 
+	}
+	
+	.timeLeft{
+		text-align: left;
 		padding: 5px;
 		font-family: 'Helvetica Neue', 'Lucida Grande', 'Segoe UI', Arial, Helvetica, Verdana, sans-serif; 
 	}
@@ -41,7 +46,7 @@
   
   .chartIframe {float: left;}
   
-  .inner1 {height:250px; width:1452px; margin:auto;  }
+  .inner1 {height:250px; width:1452px; margin:auto; padding-top: 20px; }
   .inner2 {height:250px; width:1452px; margin:auto; padding-top: 20px; }
   .inner3 {height:250px; width:1452px; margin:auto; padding-top: 20px; }
   
@@ -66,7 +71,8 @@
   // global variables
   var chart1, chart2, chart3, options1, options2, options3, charts, data;
   
-  var lastUpdate = Date.now();
+  var lastUpdateChart = Date.now();
+  var lastUpdateGauge = Date.now();
 
   // load the google gauge visualization
   google.load('visualization', '1', {packages:['gauge']});
@@ -79,14 +85,14 @@
 		var d = new Date();
 		var n = d.getMinutes();
 		
-		var sec = parseInt((d - lastUpdate) / 1000);
+		var sec = parseInt((d - lastUpdateChart) / 1000);
 		
 		if((n == 1 || n == 16 || n == 31 || n == 46) & sec > 60){
 			document.getElementById('iframe1').src = document.getElementById('iframe1').src;
 			document.getElementById('iframe2').src = document.getElementById('iframe2').src;
 			document.getElementById('iframe3').src = document.getElementById('iframe3').src;
 			
-			lastUpdate = Date.now();
+			lastUpdateChart = Date.now();
 		}
 	}
   
@@ -94,7 +100,14 @@
   
   function timeRefres(){
 	var nowTime = Date.now();
-	var sec = parseInt((nowTime - lastUpdate) / 1000);
+	
+	// chart
+	
+	var coeff = 1000 * 60 * 15;
+	var myDate = new Date(Date.parse(lastUpdateGauge));
+	var lastUpdateGaugeRounded = new Date(new Date(Math.round(myDate) / coeff) * coeff);
+	
+	var sec = parseInt((nowTime - lastUpdateGaugeRounded) / 1000);
 	var timeStr = 'Last update: ';
 	
 	if(sec < 60)
@@ -102,7 +115,18 @@
 	else
 		timeStr += parseInt(sec/60) + 'min';
 		
-	document.getElementById('time').innerHTML = timeStr;
+	document.getElementById('timeRight').innerHTML = timeStr;
+	
+	//document.getElementById('timeRight').innerHTML = myDate.toLocaleString() + '***' + rounded.toLocaleString();
+	
+	// gauge
+	console.log(lastUpdateGauge);
+	var sec = parseInt((nowTime - Date.parse(lastUpdateGauge)) / 1000);
+	var timeStr = 'Last update: ';
+	
+	timeStr += sec + 'sec';
+	
+	document.getElementById('timeLeft').innerHTML = timeStr;
   }
   
   
@@ -179,7 +203,7 @@
    // load the data
   function loadData() {
     // variable for the data point
-    var t, h, heat;
+    var t, h, heat, date;
 
     // get the data from thingspeak
     $.getJSON('https://api.thingspeak.com/channels/' + channel_id + '/feed/last.json?api_key=' + api_key, function(data) {
@@ -188,6 +212,11 @@
       temp = data.field1;
 	  humi = data.field2;
 	  heat = data.field3;
+	  date = data.created_at;
+	  
+	  lastUpdateGauge = date;
+	  
+	  //console.log(date);
       
       // if there is a data point display it
       if (temp) {
@@ -263,7 +292,14 @@
     <div id="container" >
 	<div class="header">
 		<span class="headerText"> Temperature & Humidity Monitoring </span>
-		<span id="time" class="time">Last update: 0sec</span>
+		<div style="padding-top: 5px; padding-bottom: 5px;">
+			<div style="width:50%; text-align: left; float:left; ">
+				<span id="timeLeft" class="timeLeft">Last update:</span>
+			</div>
+			<div style="width:50%; text-align: right;  float:left;">
+				<span id="timeRight" class="timeRight">Last update: 0sec</span>
+			</div>
+		</div>
 	</div>
 		<div id="inner1" class="inner1">
 			<div class="gauge"> 
