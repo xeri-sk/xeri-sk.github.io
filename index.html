@@ -176,18 +176,6 @@
 	chart3 = new google.visualization.Gauge(document.getElementById('gauge_div_heat'));
     options3 = {width: 250, height: 250, 
                min: 0, max: 1,
-			   /*
-               // RED
-               greenFrom: 0, greenTo: 50, greenColor: '#DC3912',
-               // GREEN
-               redFrom: 70, redTo: 100, redColor: '#109618',
-               // YELLOW
-               yellowFrom:50, yellowTo: 70, yellowColor: 'yellow',
-               animation:{
-                duration: 2000,
-                easing: 'inAndOut',
-                },
-				*/
                majorTicks: [
                 'OFF', 'ON' ]
 				
@@ -297,7 +285,7 @@
 				<span id="timeLeft" class="timeLeft">Last update:</span>
 			</div>
 			<div style="width:50%; text-align: right;  float:left;">
-				<span id="timeRight" class="timeRight">Last update: 0sec</span>
+				<span id="timeRight" class="timeRight">Last update:</span>
 			</div>
 		</div>
 	</div>
