@@ -71,6 +71,28 @@
   // global variables
   var chart1, chart2, chart3, options1, options2, options3, charts, data;
   
+  var chartScale = "15";
+  var chartResults = "1440";
+  
+  var iframeTemplateUrl = "https://thingspeak.com/channels/1289568/charts/";
+  
+  var iframeTemplaceParamts = "bgcolor=%23ffffff&color=%23d62020&width=1200&type=spline&timescale=" + chartScale + "&results=" + chartResults;
+  
+ 
+  
+  
+  
+  var iframe1Url = iframeTemplateUrl + "1?" + iframeTemplaceParamts + "&round=0%2C5&title=Temperature&yaxismin=20&yaxismax=30"
+  var iframe2Url = iframeTemplateUrl + "2?" + iframeTemplaceParamts + "&title=Humidity&yaxismin=0&yaxismax=100";
+  var iframe3Url = iframeTemplateUrl + "3?" + iframeTemplaceParamts + "&title=Heating&yaxismin=0&yaxismax=1";
+ 
+ 
+  /*
+  var iframe1Url = "https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&yaxismin=20&yaxismax=30&width=1200&type=spline";
+  var iframe2Url = "https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline";
+  var iframe3Url = "https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline";
+  */
+  
   var lastUpdateChart = Date.now();
   var lastUpdateGauge = Date.now();
 
@@ -79,21 +101,24 @@
   google.setOnLoadCallback(initCharts);
   
   
+  
   //setInterval('chartReload()', 1000);
   
+  function onload(){
+	chartReload();
+  }
+  
   function chartReload(){
-		//var d = new Date();
-		//var n = d.getMinutes();
+		/*
+		document.getElementById('iframe1').src = document.getElementById('iframe1').src;
+		document.getElementById('iframe2').src = document.getElementById('iframe2').src;
+		document.getElementById('iframe3').src = document.getElementById('iframe3').src;
+		*/
+		document.getElementById('iframe1').src = iframe1Url;
+		document.getElementById('iframe2').src = iframe2Url;
+		document.getElementById('iframe3').src = iframe3Url;
 		
-		//var sec = parseInt((d - lastUpdateChart) / 1000);
-		
-		//if((n == 1 || n == 16 || n == 31 || n == 46) & sec > 60){
-			document.getElementById('iframe1').src = document.getElementById('iframe1').src;
-			document.getElementById('iframe2').src = document.getElementById('iframe2').src;
-			document.getElementById('iframe3').src = document.getElementById('iframe3').src;
-			
-			lastUpdateChart = Date.now();
-		//}
+		lastUpdateChart = Date.now();
 	}
   
   setInterval('timeRefres()', 1000);
@@ -282,7 +307,7 @@
 
   </head>
 
-  <body>
+  <body onload="onload()">
     <div id="container" >
 	<div class="header">
 		<span class="headerText"> Temperature & Humidity Monitoring </span>
@@ -291,6 +316,11 @@
 				<span id="timeLeft" class="timeLeft">Last update:</span>
 			</div>
 			<div style="width:50%; text-align: right;  float:left;">
+				<span>Range:</span>
+				<select name="selectRange" id="selectRange">
+				  <option value="24">24h</option>
+				  <option value="12">12h</option>
+				</select>
 				<span id="timeRight" class="timeRight">Last update:</span>
 			</div>
 		</div>
@@ -300,7 +330,7 @@
 				<div id="gauge_div_temp"></div>
 			</div>
 			<div class="chartIframe">
-				<iframe id="iframe1" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&yaxismin=20&yaxismax=30&width=1200&type=spline"></iframe>
+				<iframe id="iframe1" width="1200" height="260" style="border: 1px solid #cccccc;" src=""></iframe>
 			</div>
 		</div>
 		<div id="inner1" class="inner2">
@@ -308,7 +338,7 @@
 				<div id="gauge_div_humi"></div>
 				</div>
 			<div class="chartIframe">
-				<iframe id="iframe2" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline"></iframe>
+				<iframe id="iframe2" width="1200" height="260" style="border: 1px solid #cccccc;" src=""></iframe>
 			</div>
 		</div>
 		<div id="inner1" class="inner3">
@@ -316,7 +346,7 @@
 				<div id="gauge_div_heat" class="gauge"></div>
 			</div>
 			<div class="chartIframe">
-				<iframe id="iframe3" width="1200" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline"></iframe>
+				<iframe id="iframe3" width="1200" height="260" style="border: 1px solid #cccccc;" src=""></iframe>
 			</div>
 		</div>
 		
