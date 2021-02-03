@@ -70,28 +70,8 @@
 
   // global variables
   var chart1, chart2, chart3, options1, options2, options3, charts, data;
+  var chartScale;
   
-  var chartScale = "15";
-  var chartResults = "1440";
-  
-  var iframeTemplateUrl = "https://thingspeak.com/channels/1289568/charts/";
-  
-  var iframeTemplaceParamts = "bgcolor=%23ffffff&color=%23d62020&width=1200&type=spline&timescale=" + chartScale + "&results=" + chartResults;
-  
- 
-  
-  
-  
-  var iframe1Url = iframeTemplateUrl + "1?" + iframeTemplaceParamts + "&round=0%2C5&title=Temperature&yaxismin=20&yaxismax=30"
-  var iframe2Url = iframeTemplateUrl + "2?" + iframeTemplaceParamts + "&title=Humidity&yaxismin=0&yaxismax=100";
-  var iframe3Url = iframeTemplateUrl + "3?" + iframeTemplaceParamts + "&title=Heating&yaxismin=0&yaxismax=1";
- 
- 
-  /*
-  var iframe1Url = "https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&yaxismin=20&yaxismax=30&width=1200&type=spline";
-  var iframe2Url = "https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline";
-  var iframe3Url = "https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline";
-  */
   
   var lastUpdateChart = Date.now();
   var lastUpdateGauge = Date.now();
@@ -114,6 +94,46 @@
 		document.getElementById('iframe2').src = document.getElementById('iframe2').src;
 		document.getElementById('iframe3').src = document.getElementById('iframe3').src;
 		*/
+		
+		var chartRange = document.getElementById("selectRange").value;
+		var chartResults = chartRange * 60;
+		
+		if(chartRange == 720){
+			chartScale = 240;
+		}
+		else if(chartRange == 168){
+			chartScale = 60;
+		}
+		else if(chartRange == 72){
+			chartScale = 30;
+		}
+		else if(chartRange == 24){
+			chartScale = 15;
+		}
+		else if(chartRange == 12){
+			chartScale = 10;
+		}
+		else if(chartRange == 6){
+			chartScale = "";
+		}
+		
+		 
+		var iframeTemplateUrl = "https://thingspeak.com/channels/1289568/charts/";
+		  
+		var iframeTemplaceParamts = "bgcolor=%23ffffff&color=%23d62020&width=1200&type=spline&dynamic=true&timescale=" + chartScale + "&results=" + chartResults;
+		  
+		 
+		var iframe1Url = iframeTemplateUrl + "1?" + iframeTemplaceParamts + "&round=0%2C5&title=Temperature&yaxismin=20&yaxismax=30"
+		var iframe2Url = iframeTemplateUrl + "2?" + iframeTemplaceParamts + "&title=Humidity&yaxismin=0&yaxismax=100";
+		var iframe3Url = iframeTemplateUrl + "3?" + iframeTemplaceParamts + "&title=Heating&yaxismin=0&yaxismax=1";
+		 
+		 
+		  /*
+		  var iframe1Url = "https://thingspeak.com/channels/1289568/charts/1?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&round=0%2C5&timescale=15&title=Temperature&type=line&yaxismin=20&yaxismax=30&width=1200&type=spline";
+		  var iframe2Url = "https://thingspeak.com/channels/1289568/charts/2?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Humidity&type=line&yaxismin=0&yaxismax=100&width=1200&type=spline";
+		  var iframe3Url = "https://thingspeak.com/channels/1289568/charts/3?bgcolor=%23ffffff&color=%23d62020&days=1&dynamic=true&timescale=15&title=Heating&type=line&yaxismin=0&yaxismax=1&width=1200&type=spline";
+		  */
+		  
 		document.getElementById('iframe1').src = iframe1Url;
 		document.getElementById('iframe2').src = iframe2Url;
 		document.getElementById('iframe3').src = iframe3Url;
@@ -127,10 +147,17 @@
 	var nowTime = Date.now();
 	
 	// chart
+	var lastUpdateGaugeRounded;
 	
-	var coeff = 1000 * 60 * 15;
-	var myDate = new Date(Date.parse(lastUpdateGauge));
-	var lastUpdateGaugeRounded = new Date(new Date(Math.round(myDate) / coeff) * coeff);
+	if(chartScale == ""){
+		lastUpdateGaugeRounded = new Date(Date.parse(lastUpdateGauge));
+	}
+	else {
+		var coeff = 1000 * 60 * chartScale;
+		var myDate = new Date(Date.parse(lastUpdateGauge));
+		lastUpdateGaugeRounded = new Date(new Date(Math.round(myDate) / coeff) * coeff);
+	}
+	
 	
 	var sec = parseInt((nowTime - lastUpdateGaugeRounded) / 1000);
 	var timeStr = 'Last update: ';
@@ -145,8 +172,10 @@
 	//console.log('D1:' +lastUpdateGaugeRounded.toLocaleString());
 	//console.log('D2:' + (new Date(lastUpdateChart)).toLocaleString());
 	
-	if(lastUpdateGaugeRounded > lastUpdateChart)
-		chartReload();
+	
+	if(lastUpdateGaugeRounded > lastUpdateChart && chartScale != ""){
+		setTimeout(chartReload(), 5000);
+	}
 	
 	//document.getElementById('timeRight').innerHTML = myDate.toLocaleString() + '***' + rounded.toLocaleString();
 	
@@ -317,9 +346,13 @@
 			</div>
 			<div style="width:50%; text-align: right;  float:left;">
 				<span>Range:</span>
-				<select name="selectRange" id="selectRange">
-				  <option value="24">24h</option>
+				<select name="selectRange" id="selectRange" onchange="chartReload()">
+				  <option value="6">6h</option>
 				  <option value="12">12h</option>
+				  <option value="24" selected="selected">1day</option>
+				  <option value="72">3day</option>
+				  <option value="168">1week</option>
+				  <option value="720">1month</option>
 				</select>
 				<span id="timeRight" class="timeRight">Last update:</span>
 			</div>
