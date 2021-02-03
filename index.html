@@ -133,6 +133,7 @@
 	// chart
 	var lastUpdateGaugeRounded;
 	
+	
 	// when dont use chartScane, dont round time
 	if(chartScale == ""){
 		lastUpdateGaugeRounded = new Date(Date.parse(lastUpdateGauge));
@@ -144,8 +145,8 @@
 		lastUpdateGaugeRounded = new Date(new Date(Math.round(myDate) / coeff) * coeff);
 	}
 	
+	var sec = parseInt((nowTime - lastUpdateGaugeRounded) / 1000);
 	
-	var sec = parseInt((nowTime - Date.parse(lastUpdateGauge)) / 1000);
 	var timeStr = 'Last update: ';
 	
 	if(sec < 60)
@@ -155,11 +156,14 @@
 		
 	document.getElementById('timeRight').innerHTML = timeStr;
 	
+	var lastUpdateChart_plus60sec = new Date(lastUpdateChart);
+	lastUpdateChart_plus60sec.setSeconds(lastUpdateChart_plus60sec.getSeconds() + 60);
 	
 	// if new data from gauge are newer than last update time [dont apply to chart without chartScale -> use dynamic update by thingspeak]
-	if(lastUpdateGaugeRounded > lastUpdateChart && chartScale != ""){
+	if(lastUpdateGaugeRounded > lastUpdateChart_plus60sec && chartScale != ""){
 		//console.log('WAITING');
-		setTimeout(function(){ chartReload(); }, 30 * 1000); // wait 30sec for chart data from thingspeak
+		//setTimeout(function(){ chartReload(); }, 30 * 1000); // wait 30sec for chart data from thingspeak
+		chartReload();;
 		lastUpdateChart = Date.now();
 	}
 	
