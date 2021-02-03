@@ -145,7 +145,7 @@
 	}
 	
 	
-	var sec = parseInt((nowTime - lastUpdateGauge) / 1000);
+	var sec = parseInt((nowTime - Date.parse(lastUpdateGauge)) / 1000);
 	var timeStr = 'Last update: ';
 	
 	if(sec < 60)
